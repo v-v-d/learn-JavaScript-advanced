@@ -3,7 +3,9 @@
 // сократить запись функций?
 // 3. * Сейчас после каждого товара на странице выводится запятая. Из-за чего это происходит?
 // Как это исправить?
-
+// Ответ: метод .map() возвращает массив, далее innerHTML вставляет массив в разметку, где он разворачивается
+// и разделяется запятыми. Исправить можно через метод .join(), указав в параметрах '', который объединяет все элементы
+// массива в строку
 'use strict';
 
 window.addEventListener('load', () => {
@@ -18,10 +20,10 @@ window.addEventListener('load', () => {
     return `<div class="goods-item"><h3>${title}</h3><p>${price}</p></div>`;
   };
 
-  const renderGoodsList = (list) => {
+  const renderGoodsList = list => {
     let goodsList = list.map(item => renderGoodsItem(item.title, item.price));
 
-    document.querySelector('.goods-list').innerHTML = goodsList;
+    document.querySelector('.goods-list').innerHTML = goodsList.join('');
   };
 
   renderGoodsList(goods);
