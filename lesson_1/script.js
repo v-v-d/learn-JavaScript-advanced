@@ -18,12 +18,20 @@ window.addEventListener('load', () => {
     {title: 'Shoes', price: 250},
   ];
 
-  const renderGoodsItem = (title, price, text = '') => `<div class="goods-item"><h3>${title}</h3><p>${price}</p></div>`;
+  // const renderGoodsItem = (title = '', price = 0) => `<div class="goods-item"><h3>${title}</h3><p>${price}</p></div>`;
+  const renderGoodsItem = (title = '', price = 0) => `<div class="card">
+        <img src="img/min/default.jpg" class="card-img-top" alt="img">
+        <div class="card-body">
+          <h5 class="card-title">${title}</h5>
+          <p class="card-text">${price}</p>
+          <a href="#" class="btn btn-primary">Add&nbsp;to&nbsp;cart</a>
+        </div>
+      </div>`;
 
   const renderGoodsList = list => {
     let goodsList = list.map(item => renderGoodsItem(item.title, item.price));
 
-    document.querySelector('.goods-list').innerHTML = goodsList.join('');
+    document.querySelector('.cards-wrapper').innerHTML = goodsList.join('');
   };
 
   renderGoodsList(goods);
