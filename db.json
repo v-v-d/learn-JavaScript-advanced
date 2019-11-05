@@ -1,0 +1,44 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "id_product": 265,
+      "name": "Shirt",
+      "price": 150
+    },
+    {
+      "id": 2,
+      "id_product": 101,
+      "name": "Socks",
+      "price": 50
+    },
+    {
+      "id": 3,
+      "id_product": 312,
+      "name": "Jacket",
+      "price": 350
+    },
+    {
+      "id": 4,
+      "id_product": 110,
+      "name": "Shoes",
+      "price": 250
+    }
+  ],
+  "cartItems": [
+    {
+      "id": 1,
+      "id_product": 101,
+      "name": "Socks",
+      "price": 50,
+      "qty": 4
+    },
+    {
+      "id": 2,
+      "id_product": 110,
+      "name": "Shoes",
+      "price": 250,
+      "qty": 6
+    }
+  ]
+}
