@@ -14,7 +14,7 @@
 
 const str = "'After the sunset,' he said. 'We'll have to go home.'";
 
-const regExp = /'/g;
+const regExp = /\B'/g;
 
 str.replace(regExp, '"');
 
