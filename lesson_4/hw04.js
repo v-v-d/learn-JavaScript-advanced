@@ -10,3 +10,11 @@
 // d. Текст произвольный.
 // e. Если одно из полей не прошло валидацию, необходимо выделить это поле красной рамкой
 // и сообщить пользователю об ошибке.
+'use strict';
+
+const str = "'After the sunset,' he said. 'We'll have to go home.'";
+
+const regExp = /'/g;
+
+str.replace(regExp, '"');
+
