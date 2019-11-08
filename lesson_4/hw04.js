@@ -31,7 +31,7 @@ const validationMethods = {
   regExpPatterns: {
     namePattern: /^[A-Za-zА-ЯА-яЁё]+$/,
     phonePattern: /^\+[0-9]{1,3}\([0-9]{3}\)[0-9]{3}-[0-9]{4}$/,
-    emailPattern: /^([a-z0-9_\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,6})$/,
+    emailPattern: /^([a-z0-9_.-]+)@([a-z0-9_.-]+)\.([a-z.]{2,6})$/,
   },
 
   /**
@@ -59,6 +59,7 @@ const validationMethods = {
   validateForm() {
     let inputsElem = this.getForm().getElementsByTagName('INPUT');
     for (const inputElem of inputsElem) {
+      console.log(typeof inputElem);
       inputElem.classList.remove(this.settings.invalidFieldClass, this.settings.validFieldClass);
       if (this.isFieldValid(inputElem)) {
         this.markTheField(inputElem, this.settings.validFieldClass);
@@ -81,7 +82,7 @@ const validationMethods = {
 
   /**
    * Проверяет поле формы на валидность.
-   * @param {Element} field Элемент поля формы.
+   * @param {object} field Элемент поля формы.
    * @return {*|boolean} True, если поле валидно, иначе false.
    */
   isFieldValid(field) {
@@ -97,7 +98,7 @@ const validationMethods = {
 
   /**
    * Маркирует поле невалидным или валидным классом.
-   * @param {Element} field Элемент поля формы.
+   * @param {object} field Элемент поля формы.
    * @param {string} fieldClass Класс для маркировки поля формы.
    */
   markTheField(field, fieldClass) {
@@ -106,7 +107,7 @@ const validationMethods = {
 
   /**
    * Добавляет сообщение с описанием ошибки под поле формы.
-   * @param {Element} field Элемент поля формы.
+   * @param {object} field Элемент поля формы.
    */
   addMessage(field) {
     let message = this.getErrorMessage(field);
@@ -125,7 +126,7 @@ const validationMethods = {
 
   /**
    * Возвращает строку с описанием ошибки.
-   * @param {Element} field Элемент поля формы.
+   * @param {object} field Элемент поля формы.
    * @return {string} Сообщение об ошибке.
    */
   getErrorMessage(field) {
@@ -141,7 +142,7 @@ const validationMethods = {
 
   /**
    * Возвращает элемент с формой.
-   * @return {Element} Элемент с формой.
+   * @return {object} Элемент с формой.
    */
   getForm() {
     return document.querySelector(this.settings.formClass);
