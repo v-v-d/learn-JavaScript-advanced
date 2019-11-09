@@ -114,7 +114,7 @@ window.addEventListener('load', () => {
         .then(items => this.cartItems = items);
     }
 
-    render() {
+    renderAll() {
       let listHtml = '';
       this.cartItems.forEach(item => {
         const cartItem = new CartItem(item.name, item.price, item.qty, item.id);
@@ -124,7 +124,7 @@ window.addEventListener('load', () => {
     }
 
     getTotalPrice() {
-      return this.cartItems.reduce((acc, item) => acc + item.price, 0);
+      return this.cartItems.reduce((acc, item) => acc + +item.price * item.qty, 0);
     }
 
     getTotalCount() {
@@ -141,10 +141,11 @@ window.addEventListener('load', () => {
 
   document.querySelector('.catalog').addEventListener('click', event => {
     if (event.target.classList.contains('cart-button')) {
-      cartList.fetchCartItems().then(() => cartList.render());
-      // let $totals = document.querySelector('.totals');
-      // let totalPrice = cartList.fetchCartItems()
-      //   .then(data => $totals.innerText = data.reduce((acc, item) => acc + +item.price, 0));
+      cartList.fetchCartItems().then(() => {
+        cartList.renderAll();
+        document.querySelector('.total-price').innerText = `Total price: ${cartList.getTotalPrice()}`;
+        document.querySelector('.total-count').innerText = `Total count: ${cartList.getTotalCount()}`;
+      });
 
       document.querySelector('.cards-wrapper').addEventListener('change', event => {
         if (event.target.value < 1) {
@@ -152,32 +153,31 @@ window.addEventListener('load', () => {
         } else {
           cartList.update(event.target.value, event.target.dataset.id);
         }
-        cartList.fetchCartItems().then(() => cartList.render());
+        cartList.fetchCartItems().then(() => {
+          cartList.renderAll();
+          document.querySelector('.total-price').innerText = `Total price: ${cartList.getTotalPrice()}`;
+          document.querySelector('.total-count').innerText = `Total count: ${cartList.getTotalCount()}`;
+        });
       });
 
       document.querySelector('.cards-wrapper').addEventListener('click', event => {
         if (event.target.classList.contains('remove-btn')) {
           cartList.remove(event.target.dataset.id);
-          cartList.fetchCartItems().then(() => cartList.render());
+          cartList.fetchCartItems().then(() => {
+            cartList.renderAll();
+            document.querySelector('.total-price').innerText = `Total price: ${cartList.getTotalPrice()} $`;
+            document.querySelector('.total-count').innerText = `Total count: ${cartList.getTotalCount()} pcs.`;
+          });
         }
       });
     }
 
     if (event.target.classList.contains('buy-btn')) {
       const id = event.target.dataset.id;
-      cartList.fetchCartItems().then(data => {
-        let isNotInCart = true;
-        for (const item of data) {
-          if (item.id === id) {
-            cartList.update(item.qty += 1, id);
-            isNotInCart = false;
-            break;
-          }
-        }
-        if (isNotInCart) {
-          cartList.addCartItem(event.target.dataset);
-        }
-     });
+      cartList.fetchCartItems().then(items => {
+        let idx = items.findIndex(entity => entity.id === id);
+        idx === -1 ? cartList.addCartItem(event.target.dataset) : cartList.update(items[idx].qty += 1, id);
+      });
     }
   });
 

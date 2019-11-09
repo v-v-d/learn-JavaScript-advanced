@@ -27,16 +27,10 @@
   ],
   "cartItems": [
     {
-      "name": "Shoes",
-      "price": "250",
-      "id": "4",
-      "qty": 7
-    },
-    {
       "name": "Shirt",
       "price": "150",
       "id": "1",
-      "qty": 4
+      "qty": 7
     }
   ]
 }
