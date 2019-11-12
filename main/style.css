@@ -3,7 +3,7 @@
     padding: 0;
 }
 
-.wrapper {
+.catalog {
     width: 1600px;
     padding: 0 100px;
     margin-left: auto;
@@ -17,6 +17,20 @@
     text-align: end;
     background-color: #dddddd;
     padding: 0 20px;
+}
+
+.cart-button {
+    margin-bottom: 4px;
+}
+
+.query {
+    height: 38px;
+    width: 300px;
+    margin-right: 15px;
+    padding: 0 10px;
+    border: hidden;
+    border-radius: 8px;
+    outline: none;
 }
 
 .cards-wrapper {
