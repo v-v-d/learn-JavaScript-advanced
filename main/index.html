@@ -16,8 +16,10 @@
   <div class="top">
     <div id="app" class="catalog">
       <header class="header">
-        <input @input="searchHandler" type="text" class="query" name="query" v-model="query" placeholder="search"/>
-        <div @click="searchHandler" class="btn btn-secondary search-button">Find</div>
+        <input type="text" class="query" name="query" v-model="query" placeholder="search"/>
+<!--        для поиска по кнопке -->
+<!--        <div @click="searchHandler" class="btn btn-secondary search-button">Find</div>-->
+        <div class="btn btn-secondary search-button">Find</div>
         <div v-if="!isCartDisplaying" @click="cartButtonHandler" class="btn btn-success cart-button">Shopping cart</div>
         <div v-if="isCartDisplaying" @click="backToProductsButtonHandler"
              class="btn btn-success back-to-products-button">
@@ -26,7 +28,9 @@
       </header>
       <main>
         <div v-if="products.length > 0" class="cards-wrapper">
-          <div v-if="!isCartDisplaying" v-for="product in filteredProducts" class="card">
+<!--          для поиска по кнопке -->
+<!--          <div v-if="!isCartDisplaying" v-for="product in filteredProducts" class="card">-->
+          <div v-if="!isCartDisplaying" v-for="product in filterProducts" class="card">
             <img src="img/min/default.jpg" class="card-img-top" alt="img">
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
