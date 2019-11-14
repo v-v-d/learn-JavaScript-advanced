@@ -27,10 +27,18 @@
   ],
   "cart": [
     {
-      "name": "Socks",
-      "price": "50",
-      "id": "2",
-      "qty": 7
+      "id": 3,
+      "id_product": 312,
+      "name": "Jacket",
+      "price": 350,
+      "qty": 5
+    },
+    {
+      "id": 1,
+      "id_product": 265,
+      "name": "Shirt",
+      "price": 150,
+      "qty": 3
     }
   ]
 }
