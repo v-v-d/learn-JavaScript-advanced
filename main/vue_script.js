@@ -3,7 +3,7 @@ window.addEventListener('load', () => {
     el: '#app',
     data: {
       products: [],
-      filteredProducts: [],
+      // filteredProducts: [], // для поиска по кнопке
       cartItems: [],
       isCartDisplaying: false,
       query: '',
@@ -15,7 +15,7 @@ window.addEventListener('load', () => {
           .then(response => response.json())
           .then(products => {
             this.products = products;
-            this.filteredProducts = products;
+            // this.filteredProducts = products; // для поиска по кнопке
           })
       },
 
@@ -61,13 +61,18 @@ window.addEventListener('load', () => {
         this.cartItems.splice(idx, 1);
       },
 
-      filterProducts() {
-        this.filteredProducts = this.products.filter(product => {
-          const regexp = new RegExp(this.query, 'i');
+      // для поиска по кнопке
+      // filterProducts() {
+      //   this.filteredProducts = this.products.filter(product => {
+      //     const regexp = new RegExp(this.query, 'i');
+      //
+      //     return regexp.test(product.name);
+      //   });
+      // },
 
-          return regexp.test(product.name);
-        });
-      },
+      // searchHandler() {
+      //   this.filterProducts();
+      // },
 
       cartButtonHandler() {
         this.isCartDisplaying = true;
@@ -106,10 +111,6 @@ window.addEventListener('load', () => {
         this.deleteCartItem(itemId);
       },
 
-      searchHandler() {
-        this.filterProducts();
-      },
-
       getCurrentCartItem(cartItemId) {
         let currentCartItemIdx = this.cartItems.findIndex(entity => entity.id === cartItemId);
 
@@ -122,6 +123,13 @@ window.addEventListener('load', () => {
       },
       getTotalQty() {
         return this.cartItems.reduce((acc, item) => acc + item.qty, 0);
+      },
+      filterProducts() {
+        return this.products.filter(product => {
+          const regexp = new RegExp(this.query, 'i');
+
+          return regexp.test(product.name);
+        });
       },
     },
     mounted() {
