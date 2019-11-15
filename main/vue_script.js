@@ -1,13 +1,128 @@
 window.addEventListener('load', () => {
+  const ProductsItemComponent = {
+    props: ['id', 'name', 'price', 'img'],
+    template: `
+        <div>
+          <img :src="img" class="card-product-img" alt="img">
+          <div class="card-body">
+            <h5 class="card-title">{{ name }}</h5>
+            <p class="card-text">price: {{ price }}</p>
+            <a href="#" @click="buyButtonHandler(id)" class="btn btn-primary buy-btn">Add&nbsp;to&nbsp;cart</a>
+          </div>
+        </div>
+      `,
+    methods: {
+      buyButtonHandler(id) {
+        this.$emit('buy', id);
+      },
+    },
+  };
+  const ProductsComponent = {
+    props: ['products'],
+    template: `
+        <div class="cards-wrapper">
+          <products-item-component
+            class="card"
+            v-if="products.length"
+            v-for="product in products"
+            :key="product.id"
+            :id="product.id"
+            :name="product.name"
+            :price="product.price"
+            :img="product.img"
+            @buy="buyButtonHandler(product)"
+          ></products-item-component>
+          <div v-else>Нет данных</div>
+        </div>
+      `,
+    methods: {
+      buyButtonHandler(product) {
+        this.$emit('buy', product);
+      },
+    },
+    components: {
+      'products-item-component': ProductsItemComponent,
+    },
+  };
+  const CartItemComponent = {
+    props: ['id', 'name', 'price', 'qty', 'img'],
+    template: `
+        <div>
+          <img :src="img" class="card-product-img" alt="img">
+            <div class="card-body">
+              <h5 class="card-title">{{ name }}</h5>
+              <div class="data-field">
+                <input @change="updateCartItemButtonHandler(id, $event)"
+                       type="number" min="1" max="999" class="cart-input" :value="qty"> pcs. x&nbsp;
+                <p class="card-text">{{ price }}$ = {{ price * qty }}$</p>
+                <div @click="deleteCartItemButtonHandler(id)" class="btn btn-danger remove-btn">X</div>
+              </div>
+            </div>
+        </div>
+      `,
+    methods: {
+      deleteCartItemButtonHandler(id) {
+        this.$emit('delete', id);
+      },
+      updateCartItemButtonHandler(id, event) {
+        this.$emit('update', id, event);
+      },
+    },
+  };
+  const CartComponent = {
+    props: ['cartItems'],
+    template: `
+      <div>
+        <div v-if="cartItems.length">
+          <div class="cards-wrapper">
+            <cart-item-component
+              class="card"
+              v-for="cartItem in cartItems"
+              :key="cartItem.id"
+              :id="cartItem.id"
+              :name="cartItem.name"
+              :price="cartItem.price"
+              :qty="cartItem.qty"
+              :img="cartItem.img"
+              @update="updateCartItemButtonHandler"
+              @delete="deleteCartItemButtonHandler"
+            ></cart-item-component>
+          </div>
+            <div class="cart-bottom"></div>
+            <div class="totals">You have {{ getTotalQty }} items with total price {{ getTotalPrice }}$</div>
+        </div>
+        <div v-else>Корзина пуста</div>
+      </div>
+      `,
+    methods: {
+      deleteCartItemButtonHandler(cartItem) {
+        this.$emit('delete', cartItem);
+      },
+      updateCartItemButtonHandler(cartItem, event) {
+        this.$emit('update', cartItem, event);
+      },
+    },
+    computed: {
+      getTotalPrice() {
+        return this.cartItems.reduce((acc, item) => acc + item.qty * item.price, 0);
+      },
+      getTotalQty() {
+        return this.cartItems.reduce((acc, item) => acc + item.qty, 0);
+      },
+    },
+    components: {
+      'cart-item-component': CartItemComponent,
+    }
+  };
+  const SearchLineComponent = {};
+
   const app = new Vue({
     el: '#app',
     data: {
       products: [],
-      // filteredProducts: [], // для поиска по кнопке
       cartItems: [],
       isCartDisplaying: false,
       query: '',
-      cartItemQty: null,
     },
     methods: {
       fetchProducts() {
@@ -15,7 +130,6 @@ window.addEventListener('load', () => {
           .then(response => response.json())
           .then(products => {
             this.products = products;
-            // this.filteredProducts = products; // для поиска по кнопке
           })
       },
 
@@ -61,19 +175,6 @@ window.addEventListener('load', () => {
         this.cartItems.splice(idx, 1);
       },
 
-      // для поиска по кнопке
-      // filterProducts() {
-      //   this.filteredProducts = this.products.filter(product => {
-      //     const regexp = new RegExp(this.query, 'i');
-      //
-      //     return regexp.test(product.name);
-      //   });
-      // },
-
-      // searchHandler() {
-      //   this.filterProducts();
-      // },
-
       cartButtonHandler() {
         this.isCartDisplaying = true;
       },
@@ -118,13 +219,8 @@ window.addEventListener('load', () => {
       },
     },
     computed: {
-      getTotalPrice() {
-        return this.cartItems.reduce((acc, item) => acc + item.qty * item.price, 0);
-      },
-      getTotalQty() {
-        return this.cartItems.reduce((acc, item) => acc + item.qty, 0);
-      },
       filterProducts() {
+        console.log(this.query);
         return this.products.filter(product => {
           const regexp = new RegExp(this.query, 'i');
 
@@ -135,7 +231,12 @@ window.addEventListener('load', () => {
     mounted() {
       this.fetchProducts();
       this.fetchCart();
-    }
+    },
+    components: {
+      'products-component': ProductsComponent,
+      'cart-component': CartComponent,
+      'search-line-component': SearchLineComponent,
+    },
   });
 
 });

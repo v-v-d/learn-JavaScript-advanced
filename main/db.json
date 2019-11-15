@@ -4,41 +4,47 @@
       "id": 1,
       "id_product": 265,
       "name": "Shirt",
-      "price": 150
+      "price": 150,
+      "img": "img/min/shirt.jpg"
     },
     {
       "id": 2,
       "id_product": 101,
       "name": "Socks",
-      "price": 50
+      "price": 50,
+      "img": "img/min/socks.jpg"
     },
-    {
-      "id": 3,
-      "id_product": 312,
-      "name": "Jacket",
-      "price": 350
-    },
-    {
-      "id": 4,
-      "id_product": 110,
-      "name": "Shoes",
-      "price": 250
-    }
-  ],
-  "cart": [
     {
       "id": 3,
       "id_product": 312,
       "name": "Jacket",
       "price": 350,
+      "img": "img/min/jacket.jpg"
+    },
+    {
+      "id": 4,
+      "id_product": 110,
+      "name": "Shoes",
+      "price": 250,
+      "img": "img/min/shoes.jpg"
+    }
+  ],
+  "cart": [
+    {
+      "id": 2,
+      "id_product": 101,
+      "name": "Socks",
+      "price": 50,
+      "img": "img/min/socks.jpg",
       "qty": 5
     },
     {
-      "id": 1,
-      "id_product": 265,
-      "name": "Shirt",
-      "price": 150,
-      "qty": 3
+      "id": 4,
+      "id_product": 110,
+      "name": "Shoes",
+      "price": 250,
+      "img": "img/min/shoes.jpg",
+      "qty": 8
     }
   ]
 }

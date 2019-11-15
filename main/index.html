@@ -16,10 +16,10 @@
   <div class="top">
     <div id="app" class="catalog">
       <header class="header">
-        <input type="text" class="query" name="query" v-model="query" placeholder="search"/>
-<!--        для поиска по кнопке -->
-<!--        <div @click="searchHandler" class="btn btn-secondary search-button">Find</div>-->
-        <div class="btn btn-secondary search-button">Find</div>
+        <div class="search-line">
+          <input type="text" class="query" name="query" v-model="query" placeholder="search"/>
+          <div class="btn btn-secondary search-button">Find</div>
+        </div>
         <div v-if="!isCartDisplaying" @click="cartButtonHandler" class="btn btn-success cart-button">Shopping cart</div>
         <div v-if="isCartDisplaying" @click="backToProductsButtonHandler"
              class="btn btn-success back-to-products-button">
@@ -27,35 +27,13 @@
         </div>
       </header>
       <main>
-        <div v-if="products.length > 0" class="cards-wrapper">
-<!--          для поиска по кнопке -->
-<!--          <div v-if="!isCartDisplaying" v-for="product in filteredProducts" class="card">-->
-          <div v-if="!isCartDisplaying" v-for="product in filterProducts" class="card">
-            <img src="img/min/default.jpg" class="card-img-top" alt="img">
-            <div class="card-body">
-              <h5 class="card-title">{{ product.name }}</h5>
-              <p class="card-text">price: {{ product.price }}</p>
-              <a href="#" @click="buyButtonHandler(product)" class="btn btn-primary buy-btn">Add&nbsp;to&nbsp;cart</a>
-            </div>
-          </div>
-          <div v-if="isCartDisplaying" v-for="cartItem in cartItems" class="card">
-            <img src="img/min/default.jpg" class="card-img-top" alt="img">
-            <div class="card-body">
-              <h5 class="card-title">{{ cartItem.name }}</h5>
-              <div class="data-field">
-                <input @change="updateCartItemButtonHandler(cartItem.id, $event)"
-                       type="number" min="1" max="999" class="cart-input" :value="cartItem.qty"> pcs. x&nbsp;
-                <p class="card-text">{{ cartItem.price }}$ = {{ cartItem.price * cartItem.qty }}$</p>
-                <div @click="deleteCartItemButtonHandler(cartItem.id)" class="btn btn-danger remove-btn">X</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-else>Нет данных</div>
-        <div v-if="isCartDisplaying">
-          <div class="cart-bottom"></div>
-          <div class="totals">You have {{ getTotalQty }} items with total price {{ getTotalPrice }}$</div>
-        </div>
+        <products-component v-if="!isCartDisplaying" :products="filterProducts" @buy="buyButtonHandler"></products-component>
+        <cart-component
+            v-if="isCartDisplaying"
+            :cart-items="cartItems"
+            @update="updateCartItemButtonHandler"
+            @delete="deleteCartItemButtonHandler"
+        ></cart-component>
       </main>
     </div>
   </div>
