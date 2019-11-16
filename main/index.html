@@ -16,7 +16,7 @@
   <div class="top">
     <div id="app" class="catalog">
       <header class="header">
-        <search-line-component @get-query="filterProductsHandler"></search-line-component>
+        <search-line-component @search="searchButtonClickHandler"></search-line-component>
         <div v-if="!isCartDisplaying" @click="cartButtonHandler" class="btn btn-success cart-button">Shopping cart</div>
         <div v-if="isCartDisplaying" @click="backToProductsButtonHandler"
              class="btn btn-success back-to-products-button">
@@ -25,7 +25,7 @@
       </header>
       <main>
         <error-message-component v-if="hasError" :error-message="errorMessage"></error-message-component>
-        <products-component v-if="!isCartDisplaying" :query="query" :products="filterProductsHandler(query)" @buy="buyButtonHandler"></products-component>
+        <products-component v-if="!isCartDisplaying" :query="query" :products="filterProducts" @buy="buyButtonHandler"></products-component>
         <cart-component
             v-if="isCartDisplaying"
             :cart-items="cartItems"

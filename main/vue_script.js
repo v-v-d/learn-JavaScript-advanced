@@ -119,13 +119,18 @@ window.addEventListener('load', () => {
   const SearchLineComponent = {
     template: `
       <div class="search-line">
-        <input @input="getQueryHandler" type="text" class="query" name="query" placeholder="search"/>
-        <div class="btn btn-secondary search-button">Find</div>
+        <input v-model="query" type="text" class="query" placeholder="search"/>
+        <div @click="searchButtonHandler" class="btn btn-secondary search-button">Find</div>
       </div>
     `,
+    data() {
+      return {
+        query: '',
+      }
+    },
     methods: {
-      getQueryHandler(event) {
-        this.$emit('get-query', event.target.value);
+      searchButtonHandler() {
+        this.$emit('search', this.query);
       },
     },
   };
@@ -273,15 +278,18 @@ window.addEventListener('load', () => {
         this.deleteCartItem(itemId);
       },
 
+      searchButtonClickHandler(query) {
+        this.query = query;
+      },
+
       getCurrentCartItem(cartItemId) {
         let currentCartItemIdx = this.cartItems.findIndex(entity => entity.id === cartItemId);
 
         return this.cartItems[currentCartItemIdx];
       },
-
-      filterProductsHandler(query = '') {
-        this.query = query;
-        // this.filteredProducts = this.products.filter(product => {
+    },
+    computed: {
+      filterProducts() {
         return this.products.filter(product => {
           const regexp = new RegExp(this.query, 'i');
 
