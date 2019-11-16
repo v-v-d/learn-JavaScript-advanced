@@ -17,10 +17,6 @@
     <div id="app" class="catalog">
       <header class="header">
         <search-line-component @get-query="filterProductsHandler"></search-line-component>
-<!--        <div class="search-line">-->
-<!--          <input type="text" class="query" name="query" v-model="query" placeholder="search"/>-->
-<!--          <div class="btn btn-secondary search-button">Find</div>-->
-<!--        </div>-->
         <div v-if="!isCartDisplaying" @click="cartButtonHandler" class="btn btn-success cart-button">Shopping cart</div>
         <div v-if="isCartDisplaying" @click="backToProductsButtonHandler"
              class="btn btn-success back-to-products-button">
@@ -28,6 +24,7 @@
         </div>
       </header>
       <main>
+        <error-message-component v-if="hasError" :error-message="errorMessage"></error-message-component>
         <products-component v-if="!isCartDisplaying" :query="query" :products="filterProductsHandler(query)" @buy="buyButtonHandler"></products-component>
         <cart-component
             v-if="isCartDisplaying"

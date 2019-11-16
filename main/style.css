@@ -124,3 +124,14 @@ body {
 .totals {
     font-size: 1.25em;
 }
+
+.error-message {
+    display: block;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    color: white;
+    font-size: 1.25em;
+    background-color: #ff4d5e;
+    margin: 25px 0;
+}

@@ -1,3 +1,5 @@
+'use strict';
+
 window.addEventListener('load', () => {
   const ProductsItemComponent = {
     props: ['id', 'name', 'price', 'img'],
@@ -125,7 +127,16 @@ window.addEventListener('load', () => {
       getQueryHandler(event) {
         this.$emit('get-query', event.target.value);
       },
-    }
+    },
+  };
+  const ErrorMessageComponent = {
+    props: ['errorMessage'],
+    template: `
+      <div class="error-message">
+        <p>Не удаётся выполнить запрос к серверу. Ошибка:</p>
+        <p>{{ errorMessage }}</p>
+      </div>
+    `,
   };
 
   const app = new Vue({
@@ -135,6 +146,8 @@ window.addEventListener('load', () => {
       cartItems: [],
       isCartDisplaying: false,
       query: '',
+      hasError: false,
+      errorMessage: '',
     },
     methods: {
       fetchProducts() {
@@ -142,13 +155,25 @@ window.addEventListener('load', () => {
           .then(response => response.json())
           .then(products => {
             this.products = products;
+            this.hasError = false;
           })
+          .catch(error => {
+            this.errorMessage = error.message;
+            this.hasError = true;
+          });
       },
 
       fetchCart() {
         return fetch('/cart')
           .then(response => response.json())
-          .then(cartItems => this.cartItems = cartItems)
+          .then(cartItems => {
+            this.cartItems = cartItems;
+            this.hasError = false;
+          })
+          .catch(error => {
+            this.errorMessage = error.message;
+            this.hasError = true;
+          });
       },
 
       addProductToCart(product) {
@@ -159,7 +184,12 @@ window.addEventListener('load', () => {
             'Content-type': 'application/json',
           },
         })
-          .then((response) => response.json());
+          .then((response) => response.json())
+          .then(() => this.hasError = false)
+          .catch(error => {
+            this.errorMessage = error.message;
+            this.hasError = true;
+          });
 
         this.cartItems.push({...product, qty: 1});
       },
@@ -173,7 +203,14 @@ window.addEventListener('load', () => {
           },
         })
           .then(response => response.json())
-          .then(() => console.log('Обновление количества прошло успешно!'));
+          .then(() => {
+            console.log('Обновление количества прошло успешно!');
+            this.hasError = false;
+          })
+          .catch(error => {
+            this.errorMessage = error.message;
+            this.hasError = true;
+          });
 
         this.getCurrentCartItem(cartItemId).qty = newQty;
       },
@@ -182,7 +219,12 @@ window.addEventListener('load', () => {
         fetch(`/cart/${itemId}`, {
           method: 'DELETE',
         })
-          .then(response => response.json());
+          .then(response => response.json())
+          .then(() => this.hasError = false)
+          .catch(error => {
+            this.errorMessage = error.message;
+            this.hasError = true;
+          });
         const idx = this.cartItems.findIndex(entity => entity.id === itemId);
         this.cartItems.splice(idx, 1);
       },
@@ -230,7 +272,7 @@ window.addEventListener('load', () => {
         return this.cartItems[currentCartItemIdx];
       },
 
-      filterProductsHandler(query='') {
+      filterProductsHandler(query = '') {
         this.query = query;
         // this.filteredProducts = this.products.filter(product => {
         return this.products.filter(product => {
@@ -248,6 +290,7 @@ window.addEventListener('load', () => {
       'products-component': ProductsComponent,
       'cart-component': CartComponent,
       'search-line-component': SearchLineComponent,
+      'error-message-component': ErrorMessageComponent,
     },
   });
 
