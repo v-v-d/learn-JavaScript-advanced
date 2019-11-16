@@ -34,7 +34,7 @@ window.addEventListener('load', () => {
             :img="product.img"
             @buy="buyButtonHandler(product)"
           ></products-item-component>
-          <div v-else>Нет данных</div>
+          <div v-if="!products.length">Нет данных</div>
         </div>
       `,
     methods: {
