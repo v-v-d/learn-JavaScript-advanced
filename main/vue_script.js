@@ -54,20 +54,20 @@ window.addEventListener('load', () => {
             <div class="card-body">
               <h5 class="card-title">{{ name }}</h5>
               <div class="data-field">
-                <input @change="updateCartItemButtonHandler(id, $event)"
+                <input @change="updateCartItemButtonHandler"
                        type="number" min="1" max="999" class="cart-input" :value="qty"> pcs. x&nbsp;
                 <p class="card-text">{{ price }}$ = {{ price * qty }}$</p>
-                <div @click="deleteCartItemButtonHandler(id)" class="btn btn-danger remove-btn">X</div>
+                <div @click="deleteCartItemButtonHandler" class="btn btn-danger remove-btn">X</div>
               </div>
             </div>
         </div>
       `,
     methods: {
-      deleteCartItemButtonHandler(id) {
-        this.$emit('delete', id);
+      deleteCartItemButtonHandler() {
+        this.$emit('delete', this.id);
       },
-      updateCartItemButtonHandler(id, event) {
-        this.$emit('update', id, event);
+      updateCartItemButtonHandler(event) {
+        this.$emit('update', this.id, event);
       },
     },
   };
@@ -266,8 +266,8 @@ window.addEventListener('load', () => {
           } else {
             if (this.getCurrentCartItem(cartItemId).qty > 1) {
               this.updateCartItem(cartItemId, 1);
-              event.target.value = 1;
             }
+            event.target.value = 1;
           }
         } else {
           this.updateCartItem(cartItemId, newQty);
