@@ -114,7 +114,19 @@ window.addEventListener('load', () => {
       'cart-item-component': CartItemComponent,
     }
   };
-  const SearchLineComponent = {};
+  const SearchLineComponent = {
+    template: `
+      <div class="search-line">
+        <input @input="getQueryHandler" type="text" class="query" name="query" placeholder="search"/>
+        <div class="btn btn-secondary search-button">Find</div>
+      </div>
+    `,
+    methods: {
+      getQueryHandler(event) {
+        this.$emit('get-query', event.target.value);
+      },
+    }
+  };
 
   const app = new Vue({
     el: '#app',
@@ -217,10 +229,10 @@ window.addEventListener('load', () => {
 
         return this.cartItems[currentCartItemIdx];
       },
-    },
-    computed: {
-      filterProducts() {
-        console.log(this.query);
+
+      filterProductsHandler(query='') {
+        this.query = query;
+        // this.filteredProducts = this.products.filter(product => {
         return this.products.filter(product => {
           const regexp = new RegExp(this.query, 'i');
 

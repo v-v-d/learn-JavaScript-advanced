@@ -16,10 +16,11 @@
   <div class="top">
     <div id="app" class="catalog">
       <header class="header">
-        <div class="search-line">
-          <input type="text" class="query" name="query" v-model="query" placeholder="search"/>
-          <div class="btn btn-secondary search-button">Find</div>
-        </div>
+        <search-line-component @get-query="filterProductsHandler"></search-line-component>
+<!--        <div class="search-line">-->
+<!--          <input type="text" class="query" name="query" v-model="query" placeholder="search"/>-->
+<!--          <div class="btn btn-secondary search-button">Find</div>-->
+<!--        </div>-->
         <div v-if="!isCartDisplaying" @click="cartButtonHandler" class="btn btn-success cart-button">Shopping cart</div>
         <div v-if="isCartDisplaying" @click="backToProductsButtonHandler"
              class="btn btn-success back-to-products-button">
@@ -27,7 +28,7 @@
         </div>
       </header>
       <main>
-        <products-component v-if="!isCartDisplaying" :products="filterProducts" @buy="buyButtonHandler"></products-component>
+        <products-component v-if="!isCartDisplaying" :query="query" :products="filterProductsHandler(query)" @buy="buyButtonHandler"></products-component>
         <cart-component
             v-if="isCartDisplaying"
             :cart-items="cartItems"
