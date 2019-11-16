@@ -133,8 +133,8 @@ window.addEventListener('load', () => {
     props: ['errorMessage'],
     template: `
       <div class="error-message">
-        <p>Не удаётся выполнить запрос к серверу. Ошибка:</p>
-        <p>{{ errorMessage }}</p>
+        <span>Не удаётся выполнить запрос к серверу. Ошибка:\n</span>
+        <span>{{ errorMessage }}</span>
       </div>
     `,
   };
@@ -151,6 +151,7 @@ window.addEventListener('load', () => {
     },
     methods: {
       fetchProducts() {
+        // return fetch('http://httpstat.us/500') //тест на ошибку
         return fetch('/products')
           .then(response => response.json())
           .then(products => {
@@ -164,6 +165,7 @@ window.addEventListener('load', () => {
       },
 
       fetchCart() {
+        // return fetch('http://httpstat.us/500') //тест на ошибку
         return fetch('/cart')
           .then(response => response.json())
           .then(cartItems => {
@@ -177,6 +179,7 @@ window.addEventListener('load', () => {
       },
 
       addProductToCart(product) {
+        // fetch('http://httpstat.us/500') //тест на ошибку
         fetch('/cart', {
           method: 'POST',
           body: JSON.stringify({...product, qty: 1}),
@@ -195,6 +198,7 @@ window.addEventListener('load', () => {
       },
 
       updateCartItem(cartItemId, newQty) {
+        // fetch('http://httpstat.us/500') //тест на ошибку
         fetch(`/cart/${cartItemId}`, {
           method: 'PATCH',
           body: JSON.stringify({qty: newQty}),
@@ -216,17 +220,20 @@ window.addEventListener('load', () => {
       },
 
       deleteCartItem(itemId) {
+        // fetch('http://httpstat.us/500') //тест на ошибку
         fetch(`/cart/${itemId}`, {
           method: 'DELETE',
         })
           .then(response => response.json())
-          .then(() => this.hasError = false)
+          .then(() => {
+            this.hasError = false;
+            const idx = this.cartItems.findIndex(entity => entity.id === itemId);
+            this.cartItems.splice(idx, 1);
+          })
           .catch(error => {
             this.errorMessage = error.message;
             this.hasError = true;
           });
-        const idx = this.cartItems.findIndex(entity => entity.id === itemId);
-        this.cartItems.splice(idx, 1);
       },
 
       cartButtonHandler() {
