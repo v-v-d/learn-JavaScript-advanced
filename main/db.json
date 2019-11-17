@@ -36,15 +36,7 @@
       "name": "Shoes",
       "price": 250,
       "img": "img/min/shoes.jpg",
-      "qty": 9
-    },
-    {
-      "id": 3,
-      "id_product": 312,
-      "name": "Jacket",
-      "price": 350,
-      "img": "img/min/jacket.jpg",
-      "qty": 2
+      "qty": 10
     },
     {
       "id": 1,

@@ -34,7 +34,7 @@ window.addEventListener('load', () => {
             :img="product.img"
             @buy="buyButtonHandler(product)"
           ></products-item-component>
-          <div v-else>Нет данных</div>
+          <div v-if="!products.length">Нет данных</div>
         </div>
       `,
     methods: {
@@ -54,20 +54,20 @@ window.addEventListener('load', () => {
             <div class="card-body">
               <h5 class="card-title">{{ name }}</h5>
               <div class="data-field">
-                <input @change="updateCartItemButtonHandler(id, $event)"
+                <input @change="updateCartItemButtonHandler"
                        type="number" min="1" max="999" class="cart-input" :value="qty"> pcs. x&nbsp;
                 <p class="card-text">{{ price }}$ = {{ price * qty }}$</p>
-                <div @click="deleteCartItemButtonHandler(id)" class="btn btn-danger remove-btn">X</div>
+                <div @click="deleteCartItemButtonHandler" class="btn btn-danger remove-btn">X</div>
               </div>
             </div>
         </div>
       `,
     methods: {
-      deleteCartItemButtonHandler(id) {
-        this.$emit('delete', id);
+      deleteCartItemButtonHandler() {
+        this.$emit('delete', this.id);
       },
-      updateCartItemButtonHandler(id, event) {
-        this.$emit('update', id, event);
+      updateCartItemButtonHandler(event) {
+        this.$emit('update', this.id, event);
       },
     },
   };
@@ -119,13 +119,18 @@ window.addEventListener('load', () => {
   const SearchLineComponent = {
     template: `
       <div class="search-line">
-        <input @input="getQueryHandler" type="text" class="query" name="query" placeholder="search"/>
-        <div class="btn btn-secondary search-button">Find</div>
+        <input v-model="query" type="text" class="query" placeholder="search"/>
+        <div @click="searchButtonHandler" class="btn btn-secondary search-button">Find</div>
       </div>
     `,
+    data() {
+      return {
+        query: '',
+      }
+    },
     methods: {
-      getQueryHandler(event) {
-        this.$emit('get-query', event.target.value);
+      searchButtonHandler() {
+        this.$emit('search', this.query);
       },
     },
   };
@@ -261,8 +266,8 @@ window.addEventListener('load', () => {
           } else {
             if (this.getCurrentCartItem(cartItemId).qty > 1) {
               this.updateCartItem(cartItemId, 1);
-              event.target.value = 1;
             }
+            event.target.value = 1;
           }
         } else {
           this.updateCartItem(cartItemId, newQty);
@@ -273,15 +278,18 @@ window.addEventListener('load', () => {
         this.deleteCartItem(itemId);
       },
 
+      searchButtonClickHandler(query) {
+        this.query = query;
+      },
+
       getCurrentCartItem(cartItemId) {
         let currentCartItemIdx = this.cartItems.findIndex(entity => entity.id === cartItemId);
 
         return this.cartItems[currentCartItemIdx];
       },
-
-      filterProductsHandler(query = '') {
-        this.query = query;
-        // this.filteredProducts = this.products.filter(product => {
+    },
+    computed: {
+      filterProducts() {
         return this.products.filter(product => {
           const regexp = new RegExp(this.query, 'i');
 
