@@ -1,1 +1,32 @@
-[{"action":"add","product_id":2,"product_name":"Socks","date":"2019-11-18T01:28:55.231Z"}]
+[
+  {
+    "action": "add",
+    "product_id": 2,
+    "product_name": "Socks",
+    "date": "2019-11-18T01:28:55.231Z"
+  },
+  {
+    "action": "qty changed",
+    "product_id": 4,
+    "product_name": "Shoes",
+    "date": "2019-11-18T01:33:52.529Z"
+  },
+  {
+    "action": "add",
+    "product_id": 1,
+    "product_name": "Shirt",
+    "date": "2019-11-18T01:35:12.009Z"
+  },
+  {
+    "action": "qty changed",
+    "product_id": 1,
+    "product_name": "Shirt",
+    "date": "2019-11-18T01:35:20.494Z"
+  },
+  {
+    "action": "delete",
+    "product_id": 1,
+    "product_name": "Shirt",
+    "date": "2019-11-18T01:38:00.509Z"
+  }
+]

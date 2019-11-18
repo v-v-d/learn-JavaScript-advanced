@@ -10,12 +10,12 @@ const isProductAlreadyInCart = function (cart, productId) {
   return cart.some(product => +product.id === +productId)
 };
 
-const getCurrentCartItemIdx = function (cart, cartItemId) {
-  return cart.findIndex(entity => entity.id === +cartItemId);
+const getCurrentItemIdx = function (items, itemId) {
+  return items.findIndex(entity => entity.id === +itemId);
 };
 
-const getCurrentCartItem = function (cart, cartItemId) {
-  return cart[getCurrentCartItemIdx(cart, cartItemId)];
+const getCurrentItem = function (items, itemId) {
+  return items[getCurrentItemIdx(items, itemId)];
 };
 
 const makeStats = function (action, product) {
@@ -77,12 +77,18 @@ const makePATCHRequest = function (url, pathToFile, pathToStatsFile) {
         return res.status(500);
       }
 
-      const currentCartItem = getCurrentCartItem(parsedData, req.params.id);
+      const currentCartItem = getCurrentItem(parsedData, req.params.id);
       currentCartItem.qty = req.body.qty;
 
       fs.writeFile(pathToFile, JSON.stringify(parsedData), () => {
         res.send(currentCartItem);
       });
+    });
+    fs.readFile('./catalog.json', 'utf-8', (err, data) => {
+      const parsedData = JSON.parse(data);
+      const currentItem = getCurrentItem(parsedData, req.params.id);
+
+      writeTheStats(pathToStatsFile, 'qty changed', currentItem);
     });
   });
 };
@@ -97,13 +103,20 @@ const makeDELETERequest = function (url, pathToFile, pathToStatsFile) {
         return res.status(500);
       }
 
-      const currentCartItemIdx = getCurrentCartItemIdx(parsedData, req.params.id);
+      const currentCartItemIdx = getCurrentItemIdx(parsedData, req.params.id);
       parsedData.splice(currentCartItemIdx, 1);
 
       fs.writeFile(pathToFile, JSON.stringify(parsedData), () => {
         res.send(parsedData);
       });
     });
+    fs.readFile('./catalog.json', 'utf-8', (err, data) => {
+      const parsedData = JSON.parse(data);
+      const currentItem = getCurrentItem(parsedData, req.params.id);
+
+      writeTheStats(pathToStatsFile, 'delete', currentItem);
+    });
+
   });
 };
 
