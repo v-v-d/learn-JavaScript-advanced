@@ -18,6 +18,27 @@ const getCurrentCartItem = function (cart, cartItemId) {
   return cart[getCurrentCartItemIdx(cart, cartItemId)];
 };
 
+const makeStats = function (action, product) {
+  return {
+    action: action,
+    product_id: product.id,
+    product_name: product.name,
+    date: new Date(),
+  }
+};
+
+const writeTheStats = function (pathToFile, action, product) {
+  fs.readFile(pathToFile, 'utf-8', (err, data) => {
+    const parsedData = JSON.parse(data);
+    const stats = makeStats(action, product);
+    parsedData.push(stats);
+
+    fs.writeFile(pathToFile, JSON.stringify(parsedData), () => {
+      console.log('Добавлена статистика о действии с товаром');
+    });
+  });
+};
+
 const makeGETRequest = function (url, pathToFile) {
   app.get(url, (req, res) => {
     fs.readFile(pathToFile, 'utf-8', (err, data) => {
@@ -27,7 +48,7 @@ const makeGETRequest = function (url, pathToFile) {
 };
 
 
-const makePOSTRequest = function (url, pathToFile) {
+const makePOSTRequest = function (url, pathToFile, pathToStatsFile) {
   app.post(url, (req, res) => {
     fs.readFile(pathToFile, 'utf-8', (err, data) => {
       const parsedData = JSON.parse(data);
@@ -42,10 +63,11 @@ const makePOSTRequest = function (url, pathToFile) {
         res.send(req.body);
       });
     });
+    writeTheStats(pathToStatsFile, 'add', req.body);
   });
 };
 
-const makePATCHRequest = function (url, pathToFile) {
+const makePATCHRequest = function (url, pathToFile, pathToStatsFile) {
   const productURL = `${url}/:id`;
   app.patch(productURL, (req, res) => {
     fs.readFile(pathToFile, 'utf-8', (err, data) => {
@@ -65,7 +87,7 @@ const makePATCHRequest = function (url, pathToFile) {
   });
 };
 
-const makeDELETERequest = function (url, pathToFile) {
+const makeDELETERequest = function (url, pathToFile, pathToStatsFile) {
   const productURL = `${url}/:id`;
   app.delete(productURL, (req, res) => {
     fs.readFile(pathToFile, 'utf-8', (err, data) => {
@@ -89,11 +111,12 @@ const productURL = '/products';
 const pathToProductsFile = './catalog.json';
 const cartURL = '/cart';
 const pathToCartFile = './cart.json';
+const pathToStatsFile = './stats.json';
 
 makeGETRequest(productURL, pathToProductsFile);
 makeGETRequest(cartURL, pathToCartFile);
-makePOSTRequest(cartURL, pathToCartFile);
-makePATCHRequest(cartURL, pathToCartFile);
-makeDELETERequest(cartURL, pathToCartFile);
+makePOSTRequest(cartURL, pathToCartFile, pathToStatsFile);
+makePATCHRequest(cartURL, pathToCartFile, pathToStatsFile);
+makeDELETERequest(cartURL, pathToCartFile, pathToStatsFile);
 
 app.listen(3000);
