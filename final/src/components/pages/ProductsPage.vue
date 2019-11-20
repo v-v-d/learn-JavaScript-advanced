@@ -45,4 +45,12 @@
     min-width: 18rem !important;
     margin-top: 30px;
   }
+
+  .card:nth-child(4n-1):last-child {
+    margin-right: 25.55%;
+  }
+
+  .card:nth-child(4n-2):last-child {
+    margin-right: 51.05%;
+  }
 </style>
