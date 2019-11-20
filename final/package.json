@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jasmine",
     "build": "webpack --mode production",
-    "devserver": "webpack-dev-server --mode development"
+    "devserver": "webpack-dev-server --mode development",
+    "rest-api": "json-server -w ./server/api/db.json -s ./dist"
   },
   "keywords": [],
   "author": "",
